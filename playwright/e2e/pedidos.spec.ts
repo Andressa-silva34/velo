@@ -1,23 +1,26 @@
 import { test, expect } from '@playwright/test';
 
+//AAA - Arrange, Act, Assert
+//preparação, execução, verificação
+
+
+
 test('deve consultar um pedido aprovado', async ({ page }) => {
+  //Arrange
   await page.goto('http://localhost:5173/');
-
- //Checkpoint: Verificar se a página de consulta de pedidos está carregada
   await expect(page.getByTestId('hero-section').getByRole('heading')).toContainText('Velô Sprint');
-
+  
   await page.getByRole('link', { name: 'Consultar Pedido' }).click();
-
-  //Checkpoint: Verificar se a página de consulta de pedidos está carregada
   await expect(page.getByRole('heading')).toContainText('Consultar Pedido');
 
+  //Act
   await page.getByTestId('search-order-id').fill('VLO-I2K8R6');
- 
   await page.getByTestId('search-order-button').click();
 
-  //Checkpoint: Verificar se o pedido foi encontrado
+  //Assert
   await expect(page.getByTestId('order-result-id')).toBeVisible();
   await expect(page.getByTestId('order-result-id')).toContainText('VLO-I2K8R6');
+
   await expect(page.getByTestId('order-result-status')).toBeVisible();
   await expect(page.getByTestId('order-result-status')).toContainText('APROVADO');
   
