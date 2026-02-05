@@ -15,13 +15,30 @@ test('deve consultar um pedido aprovado', async ({ page }) => {
 
   //Act
   await page.getByTestId('search-order-id').fill('VLO-I2K8R6');
-  await page.getByTestId('search-order-button').click();
+  await page.getByRole('button', { name: 'Buscar Pedido' }).click();
+  //await page.getByTestId('search-order-button').click();
 
   //Assert
-  await expect(page.getByTestId('order-result-id')).toBeVisible();
-  await expect(page.getByTestId('order-result-id')).toContainText('VLO-I2K8R6');
+  //await expect(page.getByTestId('order-result-id')).toBeVisible({timeout: 5000});
+    //await expect(page.getByTestId('order-result-id')).toContainText('VLO-I2K8R6');
 
-  await expect(page.getByTestId('order-result-status')).toBeVisible();
-  await expect(page.getByTestId('order-result-status')).toContainText('APROVADO');
-  
+  //await expect(page.getByTestId('order-result-status')).toBeVisible();
+  //await expect(page.getByTestId('order-result-status')).toContainText('APROVADO');
+
+  //Desafio forma 1
+  await expect(page.locator("//p[text()='Pedido']/following-sibling::p")).toBeVisible({timeout: 5000});
+  await expect(page.locator("//p[text()='Pedido']/following-sibling::p")).toContainText('VLO-I2K8R6');  
+
+
+  await expect(page.locator("//div[text()='APROVADO']")).toBeVisible({timeout: 5000});
+  await expect(page.locator("//div[text()='APROVADO']")).toContainText('APROVADO'); 
+
+  //Desafio forma 2
+  // await expect(page.getByTestId('order-result-VLO-I2K8R6')).toBeVisible({timeout: 5000});
+  // await expect(page.getByTestId('order-result-VLO-I2K8R6')).toContainText('VLO-I2K8R6');
+
+  // await expect(page.getByTestId('order-result-VLO-I2K8R6')).toBeVisible({timeout: 5000});
+  // await expect(page.getByTestId('order-result-VLO-I2K8R6')).toContainText('APROVADO');
+
+    
 });
