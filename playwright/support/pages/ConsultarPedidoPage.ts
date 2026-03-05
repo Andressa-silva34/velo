@@ -4,12 +4,7 @@ type OrderStatus = 'APROVADO' | 'REPROVADO' | 'EM_ANALISE';
 
 
 export class ConsultarPedidoPage {
-  private readonly statusclasses= {
-    APROVADO:   ['bg-green-100', 'text-green-700', 'lucide-circle-check-big' ],
-    REPROVADO:  ['bg-red-100', 'text-red-700', 'lucide-circle-x' ],
-    EM_ANALISE: ['bg-amber-100', 'text-amber-700','lucide-clock-icon']
-  } as const;
-
+ 
   constructor(private page: Page) {}
 
   async buscarPedido(numero: string) {
@@ -18,13 +13,32 @@ export class ConsultarPedidoPage {
   }
 
   async validarStatusBadge(status: OrderStatus) {
-    const [bgColor, textColor, iconClass] = this.statusclasses[status];
+    const statusclasses = {
+      APROVADO:   {
+        bgColor: 'bg-green-100', 
+        textColor: 'text-green-700',
+        iconClass: 'lucide-circle-check-big',
+      },
+      REPROVADO: {
+        bgColor: 'bg-red-100', 
+        textColor: 'text-red-700', 
+        iconClass: 'lucide-circle-x',
+      },
+      EM_ANALISE: {
+        bgColor: 'bg-amber-100', 
+        textColor: 'text-amber-700',
+        iconClass: 'lucide-clock-icon',
+      }
+    } as const;
+
+
+    const classes= statusclasses[status];
 
     const statusBadge = this.page.getByRole('status').filter({ hasText: status });
 
-    await expect(statusBadge).toHaveClass(new RegExp(bgColor));
-    await expect(statusBadge).toHaveClass(new RegExp(textColor));
+    await expect(statusBadge).toHaveClass(new RegExp(classes.bgColor));
+    await expect(statusBadge).toHaveClass(new RegExp(classes.textColor));
 
-    await expect(statusBadge.locator('svg')).toHaveClass(new RegExp(iconClass));
+    await expect(statusBadge.locator('svg')).toHaveClass(new RegExp(classes.iconClass));
   }
 }
