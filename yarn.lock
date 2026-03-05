@@ -2849,15 +2849,15 @@ sucrase@^3.35.0:
     tinyglobby "^0.2.11"
     ts-interface-checker "^0.1.9"
 
-supabase@^2.72.8:
-  version "2.72.8"
-  resolved "https://registry.yarnpkg.com/supabase/-/supabase-2.72.8.tgz#4d38757ef64f19f18ae2632f761f29080efe2131"
-  integrity sha512-3Wymv/QjmndLB9ACQA31VvJ7+KXmDqj7s8g7y+ldAcCaHBMbj+I7x0j/UBGkNbtSh0BG7kRicGA3Xc3jQlccNQ==
+supabase@^2.76.11:
+  version "2.76.11"
+  resolved "https://registry.yarnpkg.com/supabase/-/supabase-2.76.11.tgz#9c5c85450603274541e65e5e0d98b50570bd7e03"
+  integrity sha512-dr+YndEjJe54CBHayvN9B+Hhx9SiuB4h4N/SHBWsplgEkO6ubQz/Gq0/O+iBCdjSkeEjk/JLi4tc+A5yLgCjXw==
   dependencies:
     bin-links "^6.0.0"
     https-proxy-agent "^7.0.2"
     node-fetch "^3.3.2"
-    tar "7.5.3"
+    tar "7.5.9"
 
 supports-color@^7.1.0:
   version "7.2.0"
@@ -2909,10 +2909,10 @@ tailwindcss@^3.4.17:
     resolve "^1.22.8"
     sucrase "^3.35.0"
 
-tar@7.5.3:
-  version "7.5.3"
-  resolved "https://registry.yarnpkg.com/tar/-/tar-7.5.3.tgz#e1a41236e32446f75e63b720222112c4ffe5b3a1"
-  integrity sha512-ENg5JUHUm2rDD7IvKNFGzyElLXNjachNLp6RaGf4+JOgxXHkqA+gq81ZAMCUmtMtqBsoU62lcp6S27g1LCYGGQ==
+tar@7.5.9:
+  version "7.5.9"
+  resolved "https://registry.yarnpkg.com/tar/-/tar-7.5.9.tgz#817ac12a54bc4362c51340875b8985d7dc9724b8"
+  integrity sha512-BTLcK0xsDh2+PUe9F6c2TlRp4zOOBMTkoQHQIWSIzI0R7KG46uEwq4OPk2W7bZcprBMsuaeFsqwYr7pjh6CuHg==
   dependencies:
     "@isaacs/fs-minipass" "^4.0.0"
     chownr "^3.0.0"
