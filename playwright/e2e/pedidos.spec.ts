@@ -1,25 +1,27 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 import { gerarCodigoPedido } from '../support/helpers';
-import { ConsultarPedidoPage } from '../support/pages/ConsultarPedidoPage';
+import { NavbarComponent } from '../support/components/NavbarComponent';
+import { HomePage } from '../support/pages/HomePage';
+import { ConsultarPedidoPage, OrderDetails } from '../support/pages/ConsultarPedidoPage';
 // AAA - Arrange, Act, Assert
 // preparação, execução, verificação
 
 test.describe('Consultar pedidos', () => {
+  let consultarPedidoPage: ConsultarPedidoPage;
 
   test.beforeEach(async ({ page }) => {
-    // Arrange
-    await page.goto('http://localhost:5173/');
-    await expect(page.getByTestId('hero-section').getByRole('heading')).toContainText('Velô Sprint');
-
-    await page.getByRole('link', { name: 'Consultar Pedido' }).click();
-    await expect(page.getByRole('heading')).toContainText('Consultar Pedido');
+    // Arrange - home
+    await new HomePage(page).irParaHome();
+    await new NavbarComponent(page).irParaConsultarPedido();
+    consultarPedidoPage = new ConsultarPedidoPage(page);
+    await consultarPedidoPage.validarQueEstaNaPagina();
   });
 
 
   test('deve consultar um pedido aprovado', async ({ page }) => {
 
     // Test Data
-    const order = {
+    const order: OrderDetails = {
       number: 'VLO-Z73OWR',
       color: 'Lunar White',
       whells: 'sport Wheels',
@@ -28,44 +30,14 @@ test.describe('Consultar pedidos', () => {
         email: 'jorge_samuel_viana@tribunaimpressa.com.br',
       },
       payment: 'À Vista',
-      status: 'APROVADO' as const,
+      status: 'APROVADO',
     };
 
     // Act
-    const consultarPedidoPage = new ConsultarPedidoPage(page);
     await consultarPedidoPage.buscarPedido(order.number);
 
     // Assert
-    await expect(page.getByTestId(`order-result-${order.number}`)).toMatchAriaSnapshot(`
-      - img
-      - paragraph: Pedido
-      - paragraph: ${order.number}
-      - status:
-        - img
-        - text:  ${order.status}
-      - img "Velô Sprint"
-      - paragraph: Modelo
-      - paragraph: Velô Sprint
-      - paragraph: Cor
-      - paragraph: ${order.color}
-      - paragraph: Interior
-      - paragraph: cream
-      - paragraph: Rodas
-      - paragraph: ${order.whells}
-      - heading "Dados do Cliente" [level=4]
-      - paragraph: Nome
-      - paragraph: ${order.customer.name}
-      - paragraph: Email
-      - paragraph: ${order.customer.email}
-      - paragraph: Loja de Retirada
-      - paragraph
-      - paragraph: Data do Pedido
-      - paragraph: /\\d+\\/\\d+\\/\\d+/
-      - heading "Pagamento" [level=4]
-      - paragraph: ${order.payment}
-      - paragraph: /R\\$ \\d+\\.\\d+,\\d+/
-    `);
-
+    await consultarPedidoPage.validarDetalhesDoPedido(order);
     await consultarPedidoPage.validarStatusBadge(order.status);
   });
 
@@ -73,7 +45,7 @@ test.describe('Consultar pedidos', () => {
   test('Deve consultar um pedido reprovado', async ({ page }) => {
 
     // Test Data
-    const order = {
+    const order: OrderDetails = {
       number: 'VLO-ENFDON',
       color: 'Midnight Black',
       whells: 'sport Wheels',
@@ -82,44 +54,14 @@ test.describe('Consultar pedidos', () => {
         email: 'ian_damota@br.flextronics.com',
       },
       payment: 'À Vista',
-      status: 'REPROVADO' as const,
+      status: 'REPROVADO',
     };
 
     // Act
-    const consultarPedidoPage = new ConsultarPedidoPage(page);
     await consultarPedidoPage.buscarPedido(order.number);
 
     // Assert
-    await expect(page.getByTestId(`order-result-${order.number}`)).toMatchAriaSnapshot(`
-      - img
-      - paragraph: Pedido
-      - paragraph: ${order.number}
-      - status:
-        - img
-        - text:  ${order.status}
-      - img "Velô Sprint"
-      - paragraph: Modelo
-      - paragraph: Velô Sprint
-      - paragraph: Cor
-      - paragraph: ${order.color}
-      - paragraph: Interior
-      - paragraph: cream
-      - paragraph: Rodas
-      - paragraph: ${order.whells}
-      - heading "Dados do Cliente" [level=4]
-      - paragraph: Nome
-      - paragraph: ${order.customer.name}
-      - paragraph: Email
-      - paragraph: ${order.customer.email}
-      - paragraph: Loja de Retirada
-      - paragraph
-      - paragraph: Data do Pedido
-      - paragraph: /\\d+\\/\\d+\\/\\d+/
-      - heading "Pagamento" [level=4]
-      - paragraph: ${order.payment}
-      - paragraph: /R\\$ \\d+\\.\\d+,\\d+/
-    `);
-
+    await consultarPedidoPage.validarDetalhesDoPedido(order);
     await consultarPedidoPage.validarStatusBadge(order.status);
   });
 
@@ -127,7 +69,7 @@ test.describe('Consultar pedidos', () => {
   test('Deve consultar um pedido em análise', async ({ page }) => {
 
     // Test Data
-    const order = {
+    const order: OrderDetails = {
       number: 'VLO-I6NYT3',
       color: 'Glacier Blue',
       whells: 'aero Wheels',
@@ -136,44 +78,15 @@ test.describe('Consultar pedidos', () => {
         email: 'brenda-aragao99@samsaraimoveis.com.br',
       },
       payment: 'À Vista',
-      status: 'EM_ANALISE' as const,
+      status: 'EM_ANALISE',
     };
 
     // Act
-    const consultarPedidoPage = new ConsultarPedidoPage(page);
+
     await consultarPedidoPage.buscarPedido(order.number);
 
     // Assert
-    await expect(page.getByTestId(`order-result-${order.number}`)).toMatchAriaSnapshot(`
-      - img
-      - paragraph: Pedido
-      - paragraph: ${order.number}
-      - status:
-        - img
-        - text:  ${order.status}
-      - img "Velô Sprint"
-      - paragraph: Modelo
-      - paragraph: Velô Sprint
-      - paragraph: Cor
-      - paragraph: ${order.color}
-      - paragraph: Interior
-      - paragraph: cream
-      - paragraph: Rodas
-      - paragraph: ${order.whells}
-      - heading "Dados do Cliente" [level=4]
-      - paragraph: Nome
-      - paragraph: ${order.customer.name}
-      - paragraph: Email
-      - paragraph: ${order.customer.email}
-      - paragraph: Loja de Retirada
-      - paragraph
-      - paragraph: Data do Pedido
-      - paragraph: /\\d+\\/\\d+\\/\\d+/
-      - heading "Pagamento" [level=4]
-      - paragraph: ${order.payment}
-      - paragraph: /R\\$ \\d+\\.\\d+,\\d+/
-    `);
-
+    await consultarPedidoPage.validarDetalhesDoPedido(order);
     await consultarPedidoPage.validarStatusBadge(order.status);
   });
 
@@ -183,15 +96,22 @@ test.describe('Consultar pedidos', () => {
     const order = gerarCodigoPedido();
 
     // Act
-    const consultarPedidoPage = new ConsultarPedidoPage(page);
     await consultarPedidoPage.buscarPedido(order);
 
     // Assert
-    await expect(page.locator('#root')).toMatchAriaSnapshot(`
-      - img
-      - heading "Pedido não encontrado" [level=3]
-      - paragraph: Verifique o número do pedido e tente novamente
-    `);
+    await consultarPedidoPage.validarPedidoNaoEncontrado();
+  });
+
+
+  test('Deve exibir mensagem quando o código do pedido está fora do padrão', async ({ page }) => {
+
+    const codigoForaDoPadrao = 'XXX-12345';
+
+    // Act
+    await consultarPedidoPage.buscarPedido(codigoForaDoPadrao);
+
+    // Assert
+    await consultarPedidoPage.validarPedidoNaoEncontrado();
   });
 
 });
