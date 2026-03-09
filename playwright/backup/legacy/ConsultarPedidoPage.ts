@@ -83,7 +83,7 @@ export class ConsultarPedidoPage {
         bgColor: 'bg-amber-100', 
         textColor: 'text-amber-700',
         iconClass: 'lucide-clock-icon',
-      }
+      },
     } as const;
 
 

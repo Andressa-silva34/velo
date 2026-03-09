@@ -1,26 +1,13 @@
-import { test } from '@playwright/test';
+import { test, expect } from '../support/fixtures';
 import { gerarCodigoPedido } from '../support/helpers';
-import { NavbarComponent } from '../support/components/NavbarComponent';
-import { HomePage } from '../support/pages/HomePage';
-import { ConsultarPedidoPage, OrderDetails } from '../support/pages/ConsultarPedidoPage';
-// AAA - Arrange, Act, Assert
-// preparação, execução, verificação
+import type { OrderDetails } from '../support/actions/consultarPedidoActions';
 
 test.describe('Consultar pedidos', () => {
-  let consultarPedidoPage: ConsultarPedidoPage;
-
-  test.beforeEach(async ({ page }) => {
-    // Arrange - home
-    await new HomePage(page).irParaHome();
-    await new NavbarComponent(page).irParaConsultarPedido();
-    consultarPedidoPage = new ConsultarPedidoPage(page);
-    await consultarPedidoPage.validarQueEstaNaPagina();
+  test.beforeEach(async ({ app }) => {
+    await app.consultarPedido.abrirPaginaVelo();
   });
 
-
-  test('deve consultar um pedido aprovado', async ({ page }) => {
-
-    // Test Data
+  test('deve consultar um pedido aprovado', async ({ app }) => {
     const order: OrderDetails = {
       number: 'VLO-Z73OWR',
       color: 'Lunar White',
@@ -33,18 +20,13 @@ test.describe('Consultar pedidos', () => {
       status: 'APROVADO',
     };
 
-    // Act
-    await consultarPedidoPage.buscarPedido(order.number);
+    await app.consultarPedido.buscarPedido(order.number);
 
-    // Assert
-    await consultarPedidoPage.validarDetalhesDoPedido(order);
-    await consultarPedidoPage.validarStatusBadge(order.status);
+    await app.consultarPedido.validarDetalhesDoPedido(order);
+    await app.consultarPedido.validarStatusBadge(order.status);
   });
 
-
-  test('Deve consultar um pedido reprovado', async ({ page }) => {
-
-    // Test Data
+  test('Deve consultar um pedido reprovado', async ({ app }) => {
     const order: OrderDetails = {
       number: 'VLO-ENFDON',
       color: 'Midnight Black',
@@ -57,18 +39,13 @@ test.describe('Consultar pedidos', () => {
       status: 'REPROVADO',
     };
 
-    // Act
-    await consultarPedidoPage.buscarPedido(order.number);
+    await app.consultarPedido.buscarPedido(order.number);
 
-    // Assert
-    await consultarPedidoPage.validarDetalhesDoPedido(order);
-    await consultarPedidoPage.validarStatusBadge(order.status);
+    await app.consultarPedido.validarDetalhesDoPedido(order);
+    await app.consultarPedido.validarStatusBadge(order.status);
   });
 
-
-  test('Deve consultar um pedido em análise', async ({ page }) => {
-
-    // Test Data
+  test('Deve consultar um pedido em análise', async ({ app }) => {
     const order: OrderDetails = {
       number: 'VLO-I6NYT3',
       color: 'Glacier Blue',
@@ -81,37 +58,25 @@ test.describe('Consultar pedidos', () => {
       status: 'EM_ANALISE',
     };
 
-    // Act
+    await app.consultarPedido.buscarPedido(order.number);
 
-    await consultarPedidoPage.buscarPedido(order.number);
-
-    // Assert
-    await consultarPedidoPage.validarDetalhesDoPedido(order);
-    await consultarPedidoPage.validarStatusBadge(order.status);
+    await app.consultarPedido.validarDetalhesDoPedido(order);
+    await app.consultarPedido.validarStatusBadge(order.status);
   });
 
-
-  test('Deve exibir mensagem quando o pedido não é encontrado', async ({ page }) => {
-
+  test('Deve exibir mensagem quando o pedido não é encontrado', async ({ app }) => {
     const order = gerarCodigoPedido();
 
-    // Act
-    await consultarPedidoPage.buscarPedido(order);
+    await app.consultarPedido.buscarPedido(order);
 
-    // Assert
-    await consultarPedidoPage.validarPedidoNaoEncontrado();
+    await app.consultarPedido.validarPedidoNaoEncontrado();
   });
 
-
-  test('Deve exibir mensagem quando o código do pedido está fora do padrão', async ({ page }) => {
-
+  test('Deve exibir mensagem quando o código do pedido está fora do padrão', async ({ app }) => {
     const codigoForaDoPadrao = 'XXX-12345';
 
-    // Act
-    await consultarPedidoPage.buscarPedido(codigoForaDoPadrao);
+    await app.consultarPedido.buscarPedido(codigoForaDoPadrao);
 
-    // Assert
-    await consultarPedidoPage.validarPedidoNaoEncontrado();
+    await app.consultarPedido.validarPedidoNaoEncontrado();
   });
-
 });
